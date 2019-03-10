@@ -10,15 +10,19 @@ module Knock
 
   private
     def authenticate
+      logger.info("==== start authenticate auth_params[:password]: #{auth_params[:password]}===========")
       unless entity.present? && entity.authenticate(auth_params[:password])
+        logger.info("==== entity.present? && entity.authenticate(auth_params[:password]) ===========")
         raise Knock.not_found_exception_class
       end
     end
 
     def auth_token
       if entity.respond_to? :to_token_payload
+        logger.info("==== auth_token 11111 ===========")
         AuthToken.new payload: entity.to_token_payload
       else
+        logger.info("==== auth_token 22222 ===========")
         AuthToken.new payload: { sub: entity.id }
       end
     end
